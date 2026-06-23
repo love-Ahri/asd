@@ -5,7 +5,7 @@ create table nhanvien (
     email varchar(100) unique not null,
     matkhauhash varchar(255) not null,
     chucvu nvarchar(20) not null check (chucvu in ('Admin', 'Warehouse', 'Sales')),
-    trangthai nvarchar(20) default 'Inactive' check (trangthai in ('Active', 'Inactive')),
+    trangthai nvarchar(20) default 'đang khóa' check (trangthai in ('hoạt động', 'đang khóa')),
     ngaytao date not null
 );
 create table phanquyen (
@@ -68,7 +68,7 @@ create table if not exists chitietbaocao (
 --admin
 insert into nhanvien (manv, hoten, email, matkhauhash, chucvu, trangthai, ngaytao) values
 ('USR001', 'System Admin', 'trantiennghia.qngai@gmail.com', 
-'$2y$10$O0K2f.Lqj3/19q539958FejT2yX54d.h07Zf4iK9K0Qd6V3.C08wQoZ6', 'Admin', 'Active', current_date);
+'$2y$10$DsDZQ4qO8.ANZa6ZgwmRjeZrSqsRLcuOSU2C7JV.nDgiMv6x8U7OC', 'Admin', 'hoạt động', current_date);
 
 insert into phanquyen (manv, quyenxemsp, quyenthemsp, quyenthemdm, quyensuasp, 
 quyenxoasp, quyenxoadm, quyenxembc, quyenthembc, quyensuabc, quyenxoabc) values

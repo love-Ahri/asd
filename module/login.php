@@ -10,18 +10,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_login'])) {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     
-    $stmt = $db->prepare("SELECT nv.*, pq.QuyenXemSP, pq.QuyenThemSP, pq.QuyenThemDM, pq.QuyenSuaSP, pq.QuyenXoaSP, pq.QuyenXoaDM, pq.QuyenXemBC, pq.QuyenThemBC, pq.QuyenSuaBC, pq.QuyenXoaBC FROM NhanVien nv LEFT JOIN PhanQuyen pq ON nv.MaNV = pq.MaNV WHERE nv.Email = :email");
+    $stmt = $db->prepare("SELECT nv.*, pq.quyenxemsp, pq.quyenthemsp, pq.quyenthemdm, pq.quyensuasp, pq.quyenxoasp, pq.quyenxoadm, pq.quyenxembc, pq.quyenthembc, pq.quyensuabc, pq.quyenxoabc FROM nhanvien nv LEFT JOIN phanquyen pq ON nv.manv = pq.manv WHERE nv.email = :email");
     $stmt->execute([':email' => $email]);
     $user = $stmt->fetch();
     
-    if ($user && password_verify($password, $user['MatKhauHash'])) {
-        if ($user['TrangThai'] === 'Inactive') {
+    if ($user && password_verify($password, $user['matkhauhash'])) {
+        if ($user['trangthai'] === 'đang khóa') {
             $_SESSION['activation_user'] = $user;
             header('Location: change_password.php');
             exit;
         } else {
             $_SESSION['user'] = $user;
-            ghiLichSu($db, $user['MaNV'], 'Đăng nhập hệ thống thành công');
+            ghiLichSu($db, $user['manv'], 'Đăng nhập hệ thống thành công');
             header('Location: index.php');
             exit;
         }

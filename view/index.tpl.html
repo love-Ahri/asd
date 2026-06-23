@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hệ thống Quản lý </title>
+</head>
+<body>
+    <!-- tiêu đề -->
+    <table width="100%" border="0" cellpadding="5">
+        <tr>
+            <td>
+                <h2>HỆ THỐNG GÌ GÌ ĐÓ ĐÓ</h2>
+                Tài khoản: <strong><?php echo htmlspecialchars($currentUser['HoTen']); ?></strong> 
+                | <a href="index.php?logout=1"><strong>Đăng xuất</strong></a>
+            </td>
+        </tr>
+    </table>
+    
+    <hr>
+    
+    <div>
+        <strong> đi tới vị trí : </strong>
+        <a href="index.php?tab=dashboard">[ Dashboard ]</a>
+        
+        <?php if ($chucVu === 'Admin'): ?>
+            | <a href="index.php?tab=users">[ Quản Lý Nhân Viên ]</a>
+        <?php endif; ?>
+        
+        | <a href="index.php?tab=inventory">[ Quản Lý Kho & Sản Phẩm ]</a>
+        
+        <?php endif; ?>
+    </div>
+    
+    <hr>
+
+    <!--  thông báo -->
+    <?php if ($success_msg): ?>
+        <p>Thành công: <?php echo htmlspecialchars($success_msg); ?></p>
+    <?php endif; ?>
+    <?php if ($error_msg): ?>
+        <p>Lỗi: <?php echo htmlspecialchars($error_msg); ?></p>
+    <?php endif; ?>
+
+
+    <!-- trang bo cuc chinh -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="10">
+        <tr>
+            <!-- NỘI DUNG CHÍNH (CONTENT AREA) -->
+            <td valign="top" style="border: 1px solid #ccc;">
+                <?php
+                switch ($activeTab) {
+                    case 'dashboard':
+                        require_once __DIR__ . '/form.dashboard.tpl.html';
+                        break;
+                    case 'users':
+                        if ($chucVu === 'Admin') {
+                            require_once __DIR__ . '/form.users.tpl.html';
+                        }
+                        break;
+                    case 'inventory':
+                        require_once __DIR__ . '/form.inventory.tpl.html';
+                        break;
+                }
+                ?>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -22,7 +22,7 @@ if ($chucVu === 'Admin') {
                     $today = date('Y-m-d');
                     
                     $stmt = $db->prepare("insert into nhanvien (manv, hoten, email, matkhauhash, chucvu, trangthai, ngaytao) 
-                                          values (:manv, :hoten, :email, :pass, :role, 'Inactive', :today)");
+                                          values (:manv, :hoten, :email, :pass, :role, 'đang khóa', :today)");
                     $stmt->execute([
                         ':manv' => $newMaNV,
                         ':hoten' => $hoTen,
@@ -60,7 +60,7 @@ if ($chucVu === 'Admin') {
                     ]);
                     
                     $db->commit();
-                    ghiLichSu($db, $maNV, "Tạo nhân viên mới: $hoTen ($newMaNV) - Chức vụ: $role - Trạng thái: Inactive");
+                    ghiLichSu($db, $maNV, "Tạo nhân viên mới: $hoTen ($newMaNV) - Chức vụ: $role - Trạng thái: đang khóa");
                     header('Location: index.php?tab=users');
                     exit;
                 } catch (Exception $e) {
@@ -144,7 +144,7 @@ if ($chucVu === 'Admin') {
         $tempPass = 123456; 
         $tempHash = password_hash($tempPass, PASSWORD_DEFAULT);
         try {
-            $stmt = $db->prepare("update nhanvien set matkhauhash = :pass, trangthai = 'Inactive' where manv = :manv");
+            $stmt = $db->prepare("update nhanvien set matkhauhash = :pass, trangthai = 'đang khóa' where manv = :manv");
             $stmt->execute([
                 ':pass' => $tempHash,
                 ':manv' => $maNVReset
@@ -234,6 +234,9 @@ if ($chucVu === 'Admin') {
         $stmt->execute([':manv' => $maNVCN]);
         $capnhatnv = $stmt->fetch();
     }
+    
+    // Lấy danh sách tất cả nhân viên để hiển thị trên giao diện
+    $usersList = $db->query("SELECT * FROM nhanvien ORDER BY manv ASC")->fetchAll(PDO::FETCH_ASSOC);
 }
 
 
