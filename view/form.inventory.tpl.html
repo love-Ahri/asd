@@ -1,0 +1,300 @@
+<h3>Quản Lý Sản Phẩm & Danh Mục</h3>
+
+<table width="100%" border="0" cellpadding="10">
+    <tr>
+        <td width="35%" valign="top" style="border-right: 1px dashed #ccc;">
+            <h4>Quản Lý / Danh Sách Danh Mục</h4>
+            <form method="GET" action="index.php">
+                <input type="hidden" name="tab" value="inventory">
+                <fieldset>
+                    <legend>Lọc Danh Mục theo Thuộc Tính</legend>
+                    <table>
+                        <tr>
+                            <td>Hình dáng:</td>
+                        <td><select name="filter_shape" onchange="this.form.submit()">
+                                <option value="">-- Tất cả --</option>
+                                    <option value="to" <?php echo ($_GET['filter_shape'] ?? '') === 'to' ? 'selected' : ''; ?>>To</option>
+                                    <option value="trung bình" <?php echo ($_GET['filter_shape'] ?? '') === 'trung bình' ? 'selected' : ''; ?>>Trung bình</option>
+                                    <option value="nhỏ" <?php echo ($_GET['filter_shape'] ?? '') === 'nhỏ' ? 'selected' : ''; ?>>Nhỏ</option></select>
+                            </td>
+                        </tr>
+                <tr>
+                        <td>Khối lượng:</td>
+                            <td><select name="filter_weight" onchange="this.form.submit()">
+                                <option value="">-- Tất cả --</option>
+                                    <option value="Nhẹ" <?php echo ($_GET['filter_weight'] ?? '') === 'Nhẹ' ? 'selected' : ''; ?>>Nhẹ</option>
+                                    <option value="Trung bình" <?php echo ($_GET['filter_weight'] ?? '') === 'Trung bình' ? 'selected' : ''; ?>>Trung bình</option>
+                                    <option value="Nặng" <?php echo ($_GET['filter_weight'] ?? '') === 'Nặng' ? 'selected' : ''; ?>>Nặng</option></select>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="right">
+                                <a href="index.php?tab=inventory">[ bỏ lọc ]</a>
+                            </td>
+                </tr>
+                    </table>
+                </fieldset>
+            </form>
+            <br>
+            <?php if ($quyenThemDM): ?>
+                <form method="POST" action="index.php?tab=inventory">
+                    <input type="hidden" name="action_add_category" value="1">
+                    <fieldset>
+                        <legend>Thêm Danh Mục Mới</legend>
+                        <table cellpadding="3">
+                            <tr><td>Tên danh mục:</td>
+                                <td><input type="text" name="tendm" required style="width: 130px;"></td></tr>
+                            <tr>
+                            <td>Hình dáng:</td>
+                            <td><select name="hinhdang">
+                                <option value="to">To</option>
+                                  <option value="trung bình">Trung bình</option>
+                                <option value="nhỏ">Nhỏ</option>
+                                </select>
+                            </td>
+                            </tr>
+                            <tr>
+                                <td>Khối lượng:</td>
+                                <td><select name="khoiluong">
+                                        <option value="Nhẹ">Nhẹ</option>
+                                        <option value="Trung bình">Trung bình</option>
+                                        <option value="Nặng">Nặng</option></select></td>
+                            </tr>
+                            <tr>
+                            <td colspan="2" align="right">
+                                <button type="submit">Thêm danh mục</button>
+                            </td>
+                        </tr>
+                    </table>
+                    </fieldset>
+                </form>
+                <br>
+            <?php endif; ?>
+            
+            <h5>Chọn Danh Mục để Xem Sản Phẩm:</h5>
+            <table border="1" cellpadding="4" cellspacing="0" width="100%">
+                <tr bgcolor="#eeeeee">
+                    <td><strong>Danh Mục (Hình Dáng / Khối Lượng)</strong></td>
+                    <td width="30%"><strong>Thao tác</strong></td>
+                </tr>
+                <?php
+                foreach ($categoriesList as $cat):
+                    $pCount = $cat['product_count'];
+                    $isSelected = ($selectedCategory === $cat['madm']);
+                ?>
+                    <tr <?php echo $isSelected ? 'bgcolor="#ffffcc"' : ''; ?>>
+                        <td>
+                            <a href="index.php?tab=inventory&selected_category=<?php echo $cat['madm']; ?>&filter_shape=<?php echo $_GET['filter_shape'] ?? ''; ?>&filter_weight=<?php echo $_GET['filter_weight'] ?? ''; ?>">
+                            <strong><?php echo htmlspecialchars($cat['tendm']); ?></strong> 
+                            (<?php echo $pCount; ?> SP)
+                            </a>
+                            <br>
+                            <small ><?php echo htmlspecialchars($cat['hinhdang']); ?> - <?php echo htmlspecialchars($cat['khoiluong']); ?></small>
+                        </td>
+                        <td align="center">
+                            <?php if ($quyenXoaDM): ?>
+                                <a href="index.php?tab=inventory&action_delete_category=<?php echo $cat['madm']; ?>" onclick="return confirm('Bạn muốn xóa danh mục này?');">Xóa</a>
+                            <?php else: ?>
+                                -
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </td>
+        
+        <td width="65%" valign="top">
+            
+            <?php if ($vProd): ?>
+                <div>
+                    <h4>Chi Tiết Thông Tin Sản Phẩm</h4>
+                    <p>Mã sản phẩm: <strong><?php echo htmlspecialchars($vProd['masp']); ?></strong></p>
+                    <p>Tên sản phẩm: <strong><?php echo htmlspecialchars($vProd['tensp']); ?></strong></p>
+                    <p>Danh mục kho: <strong><?php echo htmlspecialchars($vProd['tendm']); ?> (<?php echo htmlspecialchars($vProd['madm']); ?>)</strong></p>
+                    <p>giá: <strong><?php echo number_format($vProd['dongia']); ?> VNĐ</strong></p>
+                    <p>Số lượng: <strong><?php echo intval($vProd['soluong']); ?> sản phẩm</strong></p>
+                    <p>Ngày nhập kho: <strong><?php echo htmlspecialchars($vProd['ngaytao']); ?></strong></p>
+                    <a href="index.php?tab=inventory&selected_category=<?php echo $vProd['madm']; ?>">[ Đóng chi tiết ]</a>
+                </div>
+            <br>
+            <?php endif; ?>
+
+            <?php if ($eProd): ?>
+                <div>
+                    <h4>Sửa Thông Tin Sản Phẩm: <?php echo htmlspecialchars($eProd['masp']); ?></h4>
+                    <form method="POST" action="index.php?tab=inventory&selected_category=<?php echo $eProd['madm']; ?>">
+                    <input type="hidden" name="action_edit_product" value="1">
+                    <input type="hidden" name="masp" value="<?php echo htmlspecialchars($eProd['masp']); ?>">
+                    <table cellpadding="3">
+                    <tr>
+                    <td>Tên sản phẩm:</td>
+                    <td><input type="text" name="tensp" value="<?php echo htmlspecialchars($eProd['tensp']); ?>" required style="width: 250px;"></td>
+                    </tr>
+                    <tr>
+                    <td>Danh mục lưu trữ:</td>
+                    <td>
+                        <select name="madm">
+                        <?php
+                            foreach ($allCatsList as $ac) {
+                                $sel = $ac['madm'] === $eProd['madm'] ? 'selected' : '';
+                                echo "<option value='{$ac['madm']}' $sel>{$ac['tendm']}</option>";
+                                }
+                            ?>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td>giá :</td>
+                                <td><input type="number" name="dongia" value="<?php echo $eProd['dongia']; ?>" required min="0" style="width: 150px;"></td></tr>
+                            <tr>
+                            <td>Số lượng tồn kho:</td>
+                            <td><input type="number" name="soluong" value="<?php echo $eProd['soluong']; ?>" required min="0" style="width: 150px;"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                <button type="submit">Cập nhật sản phẩm</button>
+                                &nbsp;&nbsp;
+                                <a href="index.php?tab=inventory&selected_category=<?php echo $eProd['madm']; ?>">[ Hủy sửa ]</a>
+                            </td></tr>
+                        </table>
+                    </form>
+                </div>
+                <br>
+            <?php endif; ?>
+
+            <h4>Quản Lý Sản Phẩm: Danh mục "<?php echo htmlspecialchars($selectedCatName ?: 'Chưa chọn'); ?>"</h4>
+            
+            <?php if ($quyenXemSP): ?>
+            <form method="GET" action="index.php">
+                <input type="hidden" name="tab" value="inventory">
+                <input type="hidden" name="selected_category" value="<?php echo htmlspecialchars($selectedCategory); ?>">
+                Tìm kiếm sản phẩm: 
+                <input type="text" name="search_query" value="<?php echo htmlspecialchars($_GET['search_query'] ?? ''); ?>" placeholder="Nhập Mã SP hoặc Tên SP">
+                <button type="submit">Tìm kiếm</button>
+                <?php if (!empty($_GET['search_query'])): ?>
+                    <a href="index.php?tab=inventory&selected_category=<?php echo $selectedCategory; ?>">[ Xóa tìm kiếm ]</a>
+                <?php endif; ?>
+            </form>
+            <br>
+            <?php endif; ?>
+
+            <?php if (!$quyenXemSP): ?>
+                <p>Bạn không có quyền xem danh sách sản phẩm thuộc danh mục.</p>
+            <?php else: ?>
+            <form method="POST" action="index.php?tab=inventory&selected_category=<?php echo htmlspecialchars($selectedCategory); ?>">
+                <table border="1" cellpadding="5" cellspacing="0" width="100%">
+                    <thead><tr bgcolor="#eeeeee">
+                            <?php if ($quyenXoaSP): ?>
+                                <th width="5%"><input type="checkbox" id="selectAllProds" onclick="toggleSelectAllProds(this)"></th>
+                            <?php endif; ?>
+                            <th>Mã SP</th>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Đơn Giá</th>
+                            <th>Số Lượng</th>
+                            <th>Ngày Tạo</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($prodsList)): ?>
+                            <tr>
+                                <td colspan="<?php echo $quyenXoaSP ? 7 : 6; ?>" align="center">
+                                Không tìm thấy sản phẩm nào của danh mục.
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($prodsList as $p): ?>
+                                <tr>
+                                    <?php if ($quyenXoaSP): ?>
+                                        <td align="center">
+                                            <input type="checkbox" name="selected_products[]" value="<?php echo htmlspecialchars($p['masp']); ?>" class="prod-checkbox">
+                                        </td>
+                                    <?php endif; ?>
+                                    <td><?php echo htmlspecialchars($p['masp']); ?></td>
+                                    <td><?php echo htmlspecialchars($p['tensp']); ?></td>
+                                    <td><?php echo number_format($p['dongia']); ?>đ</td>
+                                    <td><?php echo intval($p['soluong']); ?></td>
+                                    <td><?php echo htmlspecialchars($p['ngaytao']); ?></td>
+                                    <td>
+                                        <a href="index.php?tab=inventory&selected_category=<?php echo $selectedCategory; ?>&view_product=<?php echo $p['masp']; ?>">[ Xem ]</a>
+                                        
+                                        <?php if ($quyenSuaSP): ?>
+                                            | <a href="index.php?tab=inventory&selected_category=<?php echo $selectedCategory; ?>&edit_product=<?php echo $p['masp']; ?>">[ Sửa ]</a>
+                                        <?php endif; ?>
+                                        <?php if ($quyenXoaSP): ?>
+                                            | <a href="index.php?tab=inventory&selected_category=<?php echo $selectedCategory; ?>&action_delete_product=<?php echo $p['masp']; ?>" onclick="return confirm('Bạn chắc chắn muốn xóa sản phẩm này?');">[ Xóa ]</a>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+                
+                <?php if ($quyenXoaSP): ?>
+                    <br>
+                    <button type="submit" name="bulk_delete_products" onclick="return confirm('Xóa toàn bộ các sản phẩm đã chọn?');">Xóa sản phẩm đã chọn</button>
+                <?php endif; ?>
+            </form>
+            <br>
+            <?php endif; ?>
+            
+            <script>
+                function toggleSelectAllProds(master) {
+                    var checkboxes = document.getElementsByClassName('prod-checkbox');
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        checkboxes[i].checked = master.checked;
+                    }
+                }
+            </script>
+
+            <?php if ($quyenThemSP): ?>
+                <hr>
+                <h4>Thêm Mới Sản Phẩm</h4>
+                <form method="POST" action="index.php?tab=inventory&selected_category=<?php echo htmlspecialchars($selectedCategory); ?>">
+                    <input type="hidden" name="action_add_product" value="1">
+                    <table cellpadding="3">
+                        <tr>
+                            <td>Mã Sản phẩm:</td>
+                            <td><input type="text" name="masp" placeholder="Ví dụ: PROD004" required style="width: 150px;"> (Phải là duy nhất)</td>
+                        </tr>
+                        <tr>
+                            <td>Tên sản phẩm:</td>
+                            <td><input type="text" name="tensp" required style="width: 250px;"></td>
+                        </tr>
+                        <tr>
+                            <td>Lưu vào danh mục:</td>
+                            <td>
+                                <select name="madm" required>
+                                    <option value="">-- Chọn danh mục --</option>
+                                    <?php
+                                    foreach ($allCatsList as $ac) {
+                                        $sel = ($ac['madm'] === $selectedCategory) ? 'selected' : '';
+                                        echo "<option value='{$ac['madm']}' $sel>{$ac['tendm']}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> giá:</td>
+                            <td><input type="number" name="dongia" min="0" required value="0" style="width: 120px;"></td>
+                        </tr>
+                        <tr>
+                            <td>Số lượng tồn:</td>
+                            <td><input type="number" name="soluong" min="0" required value="0" style="width: 120px;"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <button type="submit">Thêm sản phẩm</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            <?php endif; ?>
+
+        </td>
+    </tr>
+</table>

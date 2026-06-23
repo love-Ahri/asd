@@ -1,0 +1,33 @@
+<h3>Dashboard</h3>
+<p>báo cáo tổng quan</p>
+
+<table border="1" cellpadding="10" cellspacing="0">
+    <tr bgcolor="#eeeeee">
+        <?php if ($chucVu === 'Admin'): ?>
+            <td><strong>Nhân Viên (Users)</strong></td>
+        <?php endif; ?>
+        <td><strong>Danh Mục (Categories)</strong></td>
+        <td><strong>Sản Phẩm (Products)</strong></td>
+        <td><strong>Tổng số lượng tồn kho</strong></td>
+        <td><strong>Báo Cáo (Reports)</strong></td>
+    </tr>
+    <tr>
+        <?php if ($chucVu === 'Admin'): ?>
+            <td align="center"><strong><?php echo $totalUsers; ?></strong></td>
+        <?php endif; ?>
+        <td align="center"><strong><?php echo $totalCats; ?></strong></td>
+        <td align="center"><strong><?php echo $totalProds; ?></strong></td>
+        <td align="center"><strong><?php echo intval($totalQty); ?></strong></td>
+        <td align="center"><strong><?php echo $totalReports; ?></strong></td>
+    </tr>
+</table>
+
+<h4>CHỨC NĂNG</h4>
+<ul>
+    <?php if ($chucVu === 'Admin'): ?>
+        <li><a href="index.php?tab=users">Quản lý Nhân viên & Người dùng</a></li>
+    <?php endif; ?>
+    <li><a href="index.php?tab=inventory">Quản lý Sản phẩm & Kho hàng</a></li>
+    <li><a href="index.php?tab=reports">Danh sách & Tạo Báo cáo</a></li>
+    <li><a href="index.php?tab=settings">Cài đặt & Cấu hình</a></li>
+</ul>

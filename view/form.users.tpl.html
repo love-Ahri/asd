@@ -1,0 +1,224 @@
+<h3>Quản Lý Người Dùng</h3>
+
+<h4>Danh Sách Nhân Viên </h4>
+<form method="POST" action="index.php?tab=users">
+    <table border="1" cellpadding="5" cellspacing="0" width="100%">
+        <thead>
+            <tr bgcolor="#eeeeee">
+                <th width="5%"><input type="checkbox" id="selectAllUsers" onclick="toggleSelectAllUsers(this)"></th>
+                <th>Mã NV</th>
+                <th>Họ Tên</th>
+                <th>Email</th>
+                <th>Chức Vụ</th>
+                <th>Trạng Thái</th>
+                <th>Ngày Tạo</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($usersList as $u):
+                $isRootAdmin = ($u['manv'] === 'USR001');
+            ?>
+                <tr>
+                    <td align="center">
+                        <?php if (!$isRootAdmin): ?>
+                            <input type="checkbox" name="selected_nhanvien[]" value="<?php echo htmlspecialchars($u['manv']); ?>" class="user-checkbox">
+                        <?php else: ?>
+                            -
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo htmlspecialchars($u['manv']); ?></td>
+                    <td><?php echo htmlspecialchars($u['hoten']); ?></td>
+                    <td><?php echo htmlspecialchars($u['email']); ?></td>
+                    <td><?php echo htmlspecialchars($u['chucvu']); ?></td>
+                    <td>
+                        <?php if ($u['trangthai'] === 'hoạt động'): ?>
+                            <span >hoạt động</span>
+                        <?php else: ?>
+                            <span >không hoạt động (Khóa)</span>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo htmlspecialchars($u['ngaytao']); ?></td>
+                    <td>
+                        <a href="index.php?tab=users&view_nv=<?php echo $u['manv']; ?>">[ Lịch sử & Chi tiết ]</a>
+                        <?php if (!$isRootAdmin): ?>
+                            | <a href="index.php?tab=users&edit_nv=<?php echo $u['manv']; ?>">[ Sửa trạng thái ]</a>
+                            | <form method="POST" action="index.php?tab=users" style="display:inline; margin:0; padding:0;">
+                                <input type="hidden" name="xoanv" value="1">
+                                <input type="hidden" name="manv" value="<?php echo htmlspecialchars($u['manv']); ?>">
+                                <button type="submit" onclick="return confirm('Bạn chắc chắn muốn xóa vĩnh viễn nhân viên này? Lịch sử hoạt động liên quan cũng sẽ bị xóa.');">[ Xóa ]</button>
+                              </form>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <br>
+    <button type="submit" name="xoanhieunv" onclick="return confirm('Xác nhận các nhân viên đã chọn?');">Xóa các nhân viên đã chọn </button>
+</form>
+
+<hr>
+
+<table width="100%" border="0" cellpadding="5">
+    <tr>
+        <td valign="top" width="40%">
+            <h4>Thêm Mới Người Dùng</h4>
+            <form method="POST" action="index.php?tab=users">
+                <input type="hidden" name="themnv" value="1">
+                <table cellpadding="3">
+                    <tr>
+                        <td>Họ và Tên:</td>
+                        <td><input type="text" name="hoten" required style="width: 200px;"></td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td><input type="email" name="email" required style="width: 200px;"></td>
+                    </tr>
+                    <tr>
+                        <td>Vai trò:</td>
+                        <td>
+                            <select name="role">
+                                <option value="Sales"> Nhân viên bán hàng</option>
+                                <option value="Warehouse"> Thủ kho</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Trạng thái:</td>
+                        <td><strong>không hoạt động: </strong>Mặc định khi tạo mới</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button type="submit">Thêm nhân viên mới</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </td>
+        
+        <td valign="top" width="60%">
+            <?php if ($xemnv): ?>
+                <div>
+                    <h4>Xem Chi Tiết & Lịch Sử của nhân viên: <?php echo htmlspecialchars($xemnv['hoten']); ?></h4>
+                    <p>
+                        Mã NV: <strong><?php echo htmlspecialchars($xemnv['manv']); ?></strong> | 
+                        Email: <strong><?php echo htmlspecialchars($xemnv['email']); ?></strong> | 
+                        Chức vụ: <strong><?php echo htmlspecialchars($xemnv['chucvu']); ?></strong> | 
+                        Trạng thái: <strong><?php echo htmlspecialchars($xemnv['trangthai']); ?></strong> | 
+                        Ngày tạo: <strong><?php echo htmlspecialchars($xemnv['ngaytao']); ?></strong>
+                    </p>
+                    <h5>Lịch sử hoạt động của nhân viên:</h5>
+                    <?php if (empty($lichSuHoatDong)): ?>
+                        <p>Chưa có lịch sử hoạt động nào được ghi nhận.</p>
+                    <?php else: ?>
+                        <table border="1" cellpadding="4" cellspacing="0" width="100%">
+                            <tr bgcolor="#dddddd">
+                                <td width="30%"><strong>Thời Gian</strong></td>
+                                <td><strong>Hành Động Chi Tiết</strong></td>
+                            </tr>
+                            <?php foreach ($lichSuHoatDong as $his): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($his['thoigian']); ?></td>
+                                    <td><?php echo htmlspecialchars($his['hanhdong']); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    <?php endif; ?>
+                    <br>
+                    <a href="index.php?tab=users">[ Đóng chi tiết lịch sử ]</a>
+                </div>
+                <br>
+            <?php endif; ?>
+
+            <?php if ($capnhatnv): ?>
+                <div>
+                    <h4>Sửa Thông Tin & Quyền Hạn Nhân Viên: <?php echo htmlspecialchars($capnhatnv['hoten']); ?></h4>
+                    <form method="POST" action="index.php?tab=users">
+                        <input type="hidden" name="capnhatnv" value="1">
+                        <input type="hidden" name="manv" value="<?php echo htmlspecialchars($capnhatnv['manv']); ?>">
+                        
+                        <table cellpadding="4">
+                            <tr>
+                                <td>Họ và Tên:</td>
+                                <td><input type="text" name="hoten" value="<?php echo htmlspecialchars($capnhatnv['hoten']); ?>" required style="width: 200px;"></td>
+                            </tr>
+                            <tr>
+                                <td>Email:</td>
+                                <td><input type="email" name="email" value="<?php echo htmlspecialchars($capnhatnv['email']); ?>" required style="width: 200px;"></td>
+                            </tr>
+                            <tr>
+                                <td>Vai trò (Chức vụ):</td>
+                                <td>
+                                    <select name="role">
+                                        <option value="Sales" <?php echo $capnhatnv['chucvu'] === 'Sales' ? 'selected' : ''; ?>>Sales (Nhân viên bán hàng)</option>
+                                        <option value="Warehouse" <?php echo $capnhatnv['chucvu'] === 'Warehouse' ? 'selected' : ''; ?>>Warehouse (Thủ kho)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Trạng thái:</td>
+                                <td>
+                                    <select name="trangthai">
+                                        <option value="Active" <?php echo $capnhatnv['trangthai'] === 'Active' ? 'selected' : ''; ?>>hoạt động</option>
+                                        <option value="Inactive" <?php echo $capnhatnv['trangthai'] === 'Inactive' ? 'selected' : ''; ?>>không hoạt động- đang khóa</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">Quyền hạn chi tiết:</td>
+                                <td>
+                                    <div>
+                                        <label><input type="checkbox" name="quyenxemsp" value="1" <?php echo $capnhatnv['quyenxemsp'] == 1 ? 'checked' : ''; ?>> Xem sản phẩm</label><br>
+                                        <label><input type="checkbox" name="quyenthemsp" value="1" <?php echo $capnhatnv['quyenthemsp'] == 1 ? 'checked' : ''; ?>> Thêm sản phẩm</label><br>
+                                        <label><input type="checkbox" name="quyenthemdm" value="1" <?php echo $capnhatnv['quyenthemdm'] == 1 ? 'checked' : ''; ?>> Thêm danh mục</label><br>
+                                        <label><input type="checkbox" name="quyensuasp" value="1" <?php echo $capnhatnv['quyensuasp'] == 1 ? 'checked' : ''; ?>> Sửa sản phẩm</label><br>
+                                        <label><input type="checkbox" name="quyenxoasp" value="1" <?php echo $capnhatnv['quyenxoasp'] == 1 ? 'checked' : ''; ?>> Xóa sản phẩm</label><br>
+                                        <label><input type="checkbox" name="quyenxoadm" value="1" <?php echo $capnhatnv['quyenxoadm'] == 1 ? 'checked' : ''; ?>> Xóa danh mục</label><br>
+                                        <label><input type="checkbox" name="quyenxembc" value="1" <?php echo $capnhatnv['quyenxembc'] == 1 ? 'checked' : ''; ?>> Xem báo cáo</label><br>
+                                        <label><input type="checkbox" name="quyenthembc" value="1" <?php echo $capnhatnv['quyenthembc'] == 1 ? 'checked' : ''; ?>> Thêm báo cáo</label><br>
+                                        <label><input type="checkbox" name="quyensuabc" value="1" <?php echo $capnhatnv['quyensuabc'] == 1 ? 'checked' : ''; ?>> Sửa báo cáo</label><br>
+                                        <label><input type="checkbox" name="quyenxoabc" value="1" <?php echo $capnhatnv['quyenxoabc'] == 1 ? 'checked' : ''; ?>> Xóa báo cáo</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button type="submit">Lưu tất cả thay đổi</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    
+                    <hr>
+                    <table cellpadding="4">
+                        <tr>
+                            <td>
+                                <form method="POST" action="index.php?tab=users">
+                                    <input type="hidden" name="resetpassnv" value="1">
+                                    <input type="hidden" name="manv" value="<?php echo htmlspecialchars($capnhatnv['manv']); ?>">
+                                    <button type="submit" onclick="return confirm('Bạn chắc chắn muốn cấp lại mật khẩu mới ngẫu nhiên cho nhân viên này?');">Reset & Gửi Pass mới</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <a href="index.php?tab=users">[ Hủy sửa ]</a>
+                </div>
+                <br>
+            <?php endif; ?>
+        </td>
+    </tr>
+</table>
+
+<script>
+    function toggleSelectAllUsers(master) {
+        var checkboxes = document.getElementsByClassName('user-checkbox');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = master.checked;
+        }
+    }
+</script>

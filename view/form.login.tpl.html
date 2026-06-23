@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Đăng nhập hệ thống</title>
+</head>
+<body>
+    <h1>trang Login</h1>
+    
+    <?php if (!empty($login_error)): ?>
+        <p><?php echo $login_error; ?></p>
+    <?php endif; ?>
+    <form method="POST" action="index.php">
+        <input type="hidden" name="action_login" value="1">
+        <table>
+            <tr>
+                <td>Username:</td>
+                <td><input type="text" name="email" required ></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input type="password" name="password" required></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <button type="submit">đăng nhập</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <hr>
+    <h3>tài khoản admin:trantiennghia.qngai@gmail.com / admin</h3>
+</body>
+</html>
