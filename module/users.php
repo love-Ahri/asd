@@ -1,4 +1,9 @@
 <?php
+if (isset($_SESSION['reset_pass_success'])) {
+    $success_msg = $_SESSION['reset_pass_success']['message'];
+    unset($_SESSION['reset_pass_success']);
+}
+
 if ($chucVu === 'Admin') {
     //Thêm nhân viên mới
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['themnv'])) {
@@ -78,7 +83,7 @@ if ($chucVu === 'Admin') {
         $hoTen = trim($_POST['hoten'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $role = $_POST['role'] ?? 'Sales';
-        $trangThai = $_POST['trangthai'] ?? 'Inactive';
+        $trangThai = $_POST['trangthai'] ?? 'đang khóa';
 
         $qXemSP = isset($_POST['quyenxemsp']) ? 1 : 0;
         $qThemSP = isset($_POST['quyenthemsp']) ? 1 : 0;

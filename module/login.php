@@ -1,7 +1,5 @@
 <?php
 // login.php - Login logic
-session_start();
-require_once __DIR__ . '/db.php';
 
 $login_error = '';
 
@@ -17,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_login'])) {
     if ($user && password_verify($password, $user['matkhauhash'])) {
         if ($user['trangthai'] === 'đang khóa') {
             $_SESSION['activation_user'] = $user;
-            header('Location: change_password.php');
+            header('Location: module/change_password.php');
             exit;
         } else {
             $_SESSION['user'] = $user;

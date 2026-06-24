@@ -10,7 +10,7 @@
         <tr>
             <td>
                 <h2>HỆ THỐNG GÌ GÌ ĐÓ ĐÓ</h2>
-                Tài khoản: <strong><?php echo htmlspecialchars($currentUser['HoTen']); ?></strong> 
+                Tài khoản: <strong><?php echo htmlspecialchars($currentUser['hoten']); ?></strong> 
                 | <a href="index.php?logout=1"><strong>Đăng xuất</strong></a>
             </td>
         </tr>
@@ -27,8 +27,6 @@
         <?php endif; ?>
         
         | <a href="index.php?tab=inventory">[ Quản Lý Kho & Sản Phẩm ]</a>
-        
-        <?php endif; ?>
     </div>
     
     <hr>
@@ -45,7 +43,7 @@
     <!-- trang bo cuc chinh -->
     <table width="100%" border="0" cellspacing="0" cellpadding="10">
         <tr>
-            <!-- NỘI DUNG CHÍNH (CONTENT AREA) -->
+            <!-- NỘI DUNG -->
             <td valign="top" style="border: 1px solid #ccc;">
                 <?php
                 switch ($activeTab) {

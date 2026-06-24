@@ -108,9 +108,7 @@ switch ($activeTab) {
     case 'inventory':
         require_once __DIR__ . '/module/inventory.php';
         break;
-    case 'reports':
-        require_once __DIR__ . '/module/reports.php';
-        break;
+
 }
 require_once __DIR__ . '/view/index.tpl.html';
 ?>

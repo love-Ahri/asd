@@ -67,7 +67,7 @@ create table if not exists chitietbaocao (
 
 --admin
 insert into nhanvien (manv, hoten, email, matkhauhash, chucvu, trangthai, ngaytao) values
-('USR001', 'System Admin', 'trantiennghia.qngai@gmail.com', 
+('USR001', 'admin', 'trantiennghia.qngai@gmail.com', 
 '$2y$10$DsDZQ4qO8.ANZa6ZgwmRjeZrSqsRLcuOSU2C7JV.nDgiMv6x8U7OC', 'Admin', 'hoạt động', current_date);
 
 insert into phanquyen (manv, quyenxemsp, quyenthemsp, quyenthemdm, quyensuasp, 
