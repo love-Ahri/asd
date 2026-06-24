@@ -270,6 +270,6 @@ if ($selectedCategory && $quyenXemSP) {
     $prodsList = $stmtProds->fetchAll();
 }
 
-// Tất cả danh mục cho dropdown selector
+// Tất cả danh mục
 $allCatsList = $db->query("select madm, tendm from danhmuc order by madm asc")->fetchAll();
 ?>
