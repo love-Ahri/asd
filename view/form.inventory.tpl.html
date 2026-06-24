@@ -1,25 +1,25 @@
 <h3>Quản Lý Sản Phẩm & Danh Mục</h3>
 
 <?php if (isset($_GET['cascade_warning'])): ?>
-    <div style="background-color: #fff0f0; border: 1px solid #ffcccc; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
-        <h4 style="color: #cc0000; margin-top: 0; margin-bottom: 10px;">⚠️ CẢNH BÁO XÓA LIÊN ĐỚI!</h4>
-        <p style="margin: 5px 0;">Danh mục <strong><?php echo htmlspecialchars($_GET['cascade_warning']['name']); ?></strong> (Mã DM: <?php echo htmlspecialchars($_GET['cascade_warning']['maDM']); ?>) hiện đang chứa <strong><?php echo htmlspecialchars($_GET['cascade_warning']['count']); ?></strong> sản phẩm.</p>
-        <p style="color: #cc0000; font-weight: bold; margin: 5px 0;">Nếu xóa danh mục này, toàn bộ sản phẩm bên trong cũng sẽ bị xóa vĩnh viễn và không thể khôi phục!</p>
+    <div >
+        <h4 >xóa danh mục</h4>
+        <p >Danh mục <strong><?php echo htmlspecialchars($_GET['cascade_warning']['name']); ?></strong> (Mã DM: <?php echo htmlspecialchars($_GET['cascade_warning']['maDM']); ?>) hiện đang chứa <strong><?php echo htmlspecialchars($_GET['cascade_warning']['count']); ?></strong> sản phẩm.</p>
+        <p >Nếu xóa danh mục này, toàn bộ sản phẩm bên trong cũng sẽ bị xóa!</p>
         <div style="margin-top: 15px;">
             <form method="POST" action="index.php?tab=inventory" style="display: inline-block;">
                 <input type="hidden" name="action_confirm_cascade_delete" value="1">
                 <input type="hidden" name="maDM" value="<?php echo htmlspecialchars($_GET['cascade_warning']['maDM']); ?>">
-                <button type="submit" style="background-color: #cc0000; color: white; border: none; padding: 8px 15px; cursor: pointer; font-weight: bold; border-radius: 3px;">Xác nhận xóa (Xóa cả sản phẩm)</button>
+                <button type="submit" >Xác nhận xóa (Xóa cả sản phẩm)</button>
             </form>
             &nbsp;&nbsp;
-            <a href="index.php?tab=inventory" style="text-decoration: none; display: inline-block; padding: 7px 12px; border: 1px solid #ccc; color: #333; border-radius: 3px; background-color: #f9f9f9;">Hủy bỏ</a>
+            <a href="index.php?tab=inventory" >Hủy bỏ</a>
         </div>
     </div>
 <?php endif; ?>
 
 <table width="100%" border="0" cellpadding="10">
     <tr>
-        <td width="35%" valign="top" style="border-right: 1px dashed #ccc;">
+        <td width="35%" valign="top" >
             <h4>Quản Lý / Danh Sách Danh Mục</h4>
             <form method="GET" action="index.php">
                 <input type="hidden" name="tab" value="inventory">
