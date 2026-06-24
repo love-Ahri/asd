@@ -36,7 +36,7 @@
                         <?php if ($u['trangthai'] === 'hoạt động'): ?>
                             <span >hoạt động</span>
                         <?php else: ?>
-                            <span >không hoạt động (Khóa)</span>
+                            <span >không hoạt động</span>
                         <?php endif; ?>
                     </td>
                     <td><?php echo htmlspecialchars($u['ngaytao']); ?></td>
@@ -150,11 +150,11 @@
                                 <td><input type="email" name="email" value="<?php echo htmlspecialchars($capnhatnv['email']); ?>" required style="width: 200px;"></td>
                             </tr>
                             <tr>
-                                <td>Vai trò (Chức vụ):</td>
+                                <td>Vai trò:</td>
                                 <td>
                                     <select name="role">
-                                        <option value="Sales" <?php echo $capnhatnv['chucvu'] === 'Sales' ? 'selected' : ''; ?>>Sales (Nhân viên bán hàng)</option>
-                                        <option value="Warehouse" <?php echo $capnhatnv['chucvu'] === 'Warehouse' ? 'selected' : ''; ?>>Warehouse (Thủ kho)</option>
+                                        <option value="Sales" <?php echo $capnhatnv['chucvu'] === 'Sales' ? 'selected' : ''; ?>>Nhân viên bán hàng</option>
+                                        <option value="Warehouse" <?php echo $capnhatnv['chucvu'] === 'Warehouse' ? 'selected' : ''; ?>>Thủ kho</option>
                                     </select>
                                 </td>
                             </tr>
@@ -177,10 +177,8 @@
                                         <label><input type="checkbox" name="quyensuasp" value="1" <?php echo $capnhatnv['quyensuasp'] == 1 ? 'checked' : ''; ?>> Sửa sản phẩm</label><br>
                                         <label><input type="checkbox" name="quyenxoasp" value="1" <?php echo $capnhatnv['quyenxoasp'] == 1 ? 'checked' : ''; ?>> Xóa sản phẩm</label><br>
                                         <label><input type="checkbox" name="quyenxoadm" value="1" <?php echo $capnhatnv['quyenxoadm'] == 1 ? 'checked' : ''; ?>> Xóa danh mục</label><br>
-                                        <label><input type="checkbox" name="quyenxembc" value="1" <?php echo $capnhatnv['quyenxembc'] == 1 ? 'checked' : ''; ?>> Xem báo cáo</label><br>
-                                        <label><input type="checkbox" name="quyenthembc" value="1" <?php echo $capnhatnv['quyenthembc'] == 1 ? 'checked' : ''; ?>> Thêm báo cáo</label><br>
-                                        <label><input type="checkbox" name="quyensuabc" value="1" <?php echo $capnhatnv['quyensuabc'] == 1 ? 'checked' : ''; ?>> Sửa báo cáo</label><br>
-                                        <label><input type="checkbox" name="quyenxoabc" value="1" <?php echo $capnhatnv['quyenxoabc'] == 1 ? 'checked' : ''; ?>> Xóa báo cáo</label>
+                                        <label><input type="checkbox" name="quyenxoabc" value="1" <?php echo $capnhatnv['quyenxoabc'] == 1 ? 'checked' : ''; ?>> quyền v.v</label><br>
+
                                     </div>
                                 </td>
                             </tr>
@@ -200,7 +198,7 @@
                                 <form method="POST" action="index.php?tab=users">
                                     <input type="hidden" name="resetpassnv" value="1">
                                     <input type="hidden" name="manv" value="<?php echo htmlspecialchars($capnhatnv['manv']); ?>">
-                                    <button type="submit" onclick="return confirm('Bạn chắc chắn muốn cấp lại mật khẩu mới ngẫu nhiên cho nhân viên này?');">Reset & Gửi Pass mới</button>
+                                    <button type="submit" onclick="return confirm('Bạn chắc chắn muốn reset mật khẩu cho nhân viên này?');">Reset mật khẩu</button>
                                 </form>
                             </td>
                         </tr>
