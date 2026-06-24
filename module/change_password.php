@@ -38,8 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (strlen($new_password) < 6) {
         $error = 'Mật khẩu mới phải có tối thiểu từ 6 ký tự trở lên.';
-    } elseif ($new_password !== $confirm_password) {
-        $error = 'Mật khẩu xác nhận không khớp.';
     } else {
         try {
             $db->beginTransaction();
@@ -61,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             $_SESSION['user'] = $updatedUser;
             unset($_SESSION['activation_user']);
-            
             header('Location: ../index.php');
             exit;
         } catch (Exception $e) {
